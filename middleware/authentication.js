@@ -31,7 +31,7 @@ const authentication = async (req, res, next) => {
                 }
                 next()
             } else {
-                const fetchdata = await fetch("http://localhost:1500/users/refresh", {
+                const fetchdata = await fetch("https://wild-gold-betta-fez.cyclic.app/users/refresh", {
                     headers: {
                         cookie: `reftoken=${refreshToken}`
                     }
