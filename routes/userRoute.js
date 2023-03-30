@@ -3,7 +3,7 @@ const { UserModel } = require("../models/userModel");
 const userRoute = express.Router()
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
-const { client } = require("../redis");
+const { BlockModel } = require("../models/blockUser");
 require("dotenv").config()
 
 // user register route-----
@@ -44,8 +44,8 @@ userRoute.post("/login", async (req, res) => {
                     expiresIn: "1day"
                 });
                 // console.log(token);
-                client.set(`accessToken${user[0]._id}`,JSON.stringify(token), { EX: 1800 })
-                client.set(`refToken${user[0]._id}`,JSON.stringify(reftoken), { EX: 1800 })
+                // client.set(`accessToken${user[0]._id}`,JSON.stringify(token), { EX: 1800 })
+                // client.set(`refToken${user[0]._id}`,JSON.stringify(reftoken), { EX: 1800 })
                 res.cookie("token", token)
                 res.cookie("reftoken", reftoken)
                 res.status(200).json({ "success": "login successful", token })
@@ -68,10 +68,11 @@ userRoute.get("/logout", async (req, res) => {
     try {
         const token = req.cookies.token;
 
-        client.set(token, "token", {
-            EX: 1800
-        })
-
+        // client.set(token, "token", {
+        //     EX: 1800
+        // })
+        let block=new BlockModel({token})
+        await block.save()
         res.status(200).json({ "success": "user blocklisted" })
 
     } catch (error) {
@@ -89,7 +90,7 @@ userRoute.get("/refresh", async (req, res) => {
         var decoded = jwt.verify(reftoken, process.env.refreshKey);
         if (decoded) {
             var token = jwt.sign({ userId: decoded.userId }, process.env.accessKey, { expiresIn: "30m" });
-            client.set(`accessToken${decoded.userId}`,JSON.stringify(token), { EX: 1800 })
+            // client.set(`accessToken${decoded.userId}`,JSON.stringify(token), { EX: 1800 })
             res.cookie("token", token)
             res.status(200).json({ token })
         } else {

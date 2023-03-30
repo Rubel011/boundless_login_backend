@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
+const { BlockModel } = require("../models/blockUser");
 const { UserModel } = require("../models/userModel");
-const { client } = require("../redis");
 require("dotenv").config()
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const authentication = async (req, res, next) => {
     
     const token = req.cookies.token
     const refreshToken = req.cookies.reftoken
-    const isBlacklisted = await client.get(token)
+    const isBlacklisted = await BlockModel.find({token})
 
     if (isBlacklisted) {
         return res.status(401).send('Token is blacklisted');

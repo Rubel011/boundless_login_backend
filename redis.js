@@ -5,4 +5,4 @@ client.connect({
     url: process.env.redis_url
 });
 
-module.exports = { client }
+// module.exports = { client }
