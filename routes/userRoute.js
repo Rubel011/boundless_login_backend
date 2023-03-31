@@ -4,6 +4,7 @@ const userRoute = express.Router()
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { BlockModel } = require("../models/blockUser");
+const { client } = require("../redis");
 require("dotenv").config()
 
 // user register route-----
@@ -68,11 +69,11 @@ userRoute.get("/logout", async (req, res) => {
     try {
         const token = req.cookies.token;
 
-        // client.set(token, "token", {
-        //     EX: 1800
-        // })
-        let block=new BlockModel({token})
-        await block.save()
+        client.set(token, "token", {
+            EX: 1800
+        })
+        // let block=new BlockModel({token})
+        // await block.save()
         res.status(200).json({ "success": "user blocklisted" })
 
     } catch (error) {

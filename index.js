@@ -14,25 +14,25 @@ const expressWinston= require("express-winston")
 const winston= require("winston");
 require("winston-mongodb")
 
-app.use(expressWinston.logger({
-    transports: [
+// app.use(expressWinston.logger({
+//     transports: [
       // new winston.transports.File({
       //   level:"info",
       //   json:true,
       //   filename:"alllogs.json"
       // }),
-      new winston.transports.MongoDB({
-        level:"silly",
-        db:process.env.mongoUrl,
-        json:true
+  //     new winston.transports.MongoDB({
+  //       level:"silly",
+  //       db:process.env.mongoUrl,
+  //       json:true
        
-      })
-    ],
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.json()
-    ),
-  }));
+  //     })
+  //   ],
+  //   format: winston.format.combine(
+  //     winston.format.colorize(),
+  //     winston.format.json()
+  //   ),
+  // }));
 
 
 // this is the home route---
