@@ -49,7 +49,7 @@ userRoute.post("/login", async (req, res) => {
                 // client.set(`refToken${user[0]._id}`,JSON.stringify(reftoken), { EX: 1800 })
                 res.cookie("token", token)
                 res.cookie("reftoken", reftoken)
-                res.status(200).json({ "success": "login successful", token })
+                res.status(200).json({ "success": "login successful",name:user[0].name, token })
             } else {
                 res.status(401).json({ "err": "wrong credential" })
             }
