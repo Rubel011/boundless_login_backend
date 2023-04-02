@@ -51,7 +51,7 @@ userRoute.post("/login", async (req, res) => {
                 res.cookie("reftoken", reftoken)
                 res.status(200).json({ "success": "login successful",name:user[0].name, token })
             } else {
-                res.status(401).json({ "err": "wrong credential" })
+                res.status(400).json({ "err": "wrong credential" })
             }
         });
 
@@ -69,11 +69,11 @@ userRoute.get("/logout", async (req, res) => {
     try {
         const token = req.cookies.token;
 
-        client.set(token, "token", {
-            EX: 1800
-        })
-        // let block=new BlockModel({token})
-        // await block.save()
+        // client.set(token, "token", {
+        //     EX: 1800
+        // })
+        let block=new BlockModel({token})
+        await block.save()
         res.status(200).json({ "success": "user blocklisted" })
 
     } catch (error) {

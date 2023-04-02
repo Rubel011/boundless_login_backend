@@ -8,8 +8,9 @@ const authentication = async (req, res, next) => {
     
     const token = req.cookies.token
     const refreshToken = req.cookies.reftoken
-    // const isBlacklisted = await BlockModel.find({token})
-    const isBlacklisted = await client.get(token)
+    const isBlacklisted = await BlockModel.findOne({token})
+    console.log(isBlacklisted);
+    // const isBlacklisted = await client.get(token)
 
     if (isBlacklisted) {
         return res.status(401).send('Token is blacklisted');

@@ -13,7 +13,8 @@ require('dotenv').config();
 const expressWinston= require("express-winston")
 const winston= require("winston");
 require("winston-mongodb")
-
+const {passport}=require("./config/google_auth")
+const jwt = require("jsonwebtoken");
 // app.use(expressWinston.logger({
 //     transports: [
       // new winston.transports.File({
@@ -40,7 +41,20 @@ app.get("/",(req,res)=>{
     res.send("home page");
 })
 
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile','email'] }));
 
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login',session:false }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    const {id}=req.user
+    const  authToken = jwt.sign({ userId: id }, process.env.accessKey,{ expiresIn: '1h' });
+const  refreshToken = jwt.sign({ userId: id}, process.env.refreshKey,{ expiresIn: "21 days" });
+res.cookie('authToken',authToken,{expires:new Date(Date.now()+50000000)})
+res.cookie("refreshToken",refreshToken);
+    res.redirect('/');
+  });
 // attaching the user login and register routes----
 app.use("/users",userRoute)
 // user authentication----
