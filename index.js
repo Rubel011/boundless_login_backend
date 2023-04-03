@@ -53,7 +53,7 @@ app.get('/auth/google/callback',
 const  refreshToken = jwt.sign({ userId: id}, process.env.refreshKey,{ expiresIn: "21 days" });
 res.cookie('authToken',authToken,{expires:new Date(Date.now()+50000000)})
 res.cookie("refreshToken",refreshToken);
-    res.redirect('/');
+    res.redirect('https://eclectic-melomakarona-f2db1e.netlify.app/lobby.html');
   });
 // attaching the user login and register routes----
 app.use("/users",userRoute)
